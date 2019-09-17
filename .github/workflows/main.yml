@@ -15,9 +15,12 @@ jobs:
     - name: Show appsettings.json
       run: |
         cat $GITHUB_WORKSPACE/appsettings.json
+    - name: Show updated Json
+      run: |
+        jq '.token = "testing"' $GITHUB_WORKSPACE/appsettings.json
     - name: Update appsettings.json
       run: |
-        jq '.token = "testing"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json
+        jq '.token = "testing"' $GITHUB_WORKSPACE/appsettings.json | sponge $GITHUB_WORKSPACE/appsettings.json
     - name: Show appsettings.json again
       run: |
         cat $GITHUB_WORKSPACE/appsettings.json
