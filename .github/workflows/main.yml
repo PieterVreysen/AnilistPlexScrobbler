@@ -20,15 +20,9 @@ jobs:
         jq '.token = "testing"' $GITHUB_WORKSPACE/appsettings.json
     - name: Update appsettings.json
       env: 
-        ANILIST_TOKEN: test
+        ANILIST_TOKEN: ${{ secrets.ANILIST_TOKEN }}
       run: |
         jq '.token = "${ANILIST_TOKEN}"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json.temp && cp $GITHUB_WORKSPACE/appsettings.json.temp $GITHUB_WORKSPACE/appsettings.json 
     - name: Show appsettings.json again
       run: |
         cat $GITHUB_WORKSPACE/appsettings.json
-    - name: Hello world
-      run: echo Hello world ${FIRST_NAME} ${MIDDLE_NAME} ${LAST_NAME}!
-      env:
-        first_name: Mona
-        middle_name: The
-        last_name: Octocat
