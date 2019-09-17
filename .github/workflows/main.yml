@@ -17,5 +17,5 @@ jobs:
         ANILIST_TOKEN: testing
       run: |
         jq '.token = "${ANILIST_TOKEN}"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json
-        cat $GITHUB_WORKSPACE/appsettings.json
-        
+    - name: Show appsettings.json
+      run: cat $GITHUB_WORKSPACE/appsettings.json
