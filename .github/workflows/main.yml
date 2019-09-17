@@ -34,3 +34,23 @@ jobs:
       uses: actions/docker/cli@master
       with:
         args: push magenof/anilistplescrobbler
+        
+    - name: Update deployment file
+      run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|magenof/anilistplescrobbler:'${TAG}'|' $GITHUB_WORKSPACE/Config/deployment.yml
+
+    - name: Save DigitalOcean kubeconfig
+      uses: digitalocean/action-doctl@master
+      env:
+        DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      with:
+        args: kubernetes cluster kubeconfig show k8s-ams3 > $GITHUB_WORKSPACE/.kubeconfig
+
+    - name: Deploy to DigitalOcean Kubernetes
+      uses: docker://lachlanevenson/k8s-kubectl
+      with:
+        args: --kubeconfig=/github/workspace/.kubeconfig apply -f /github/workspace/Config/deployment.yml
+
+    - name: Verify deployment
+      uses: docker://lachlanevenson/k8s-kubectl
+      with:
+        args: --kubeconfig=/github/workspace/.kubeconfig rollout status deployment/anilistplexscrobbler
