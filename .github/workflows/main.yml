@@ -12,19 +12,8 @@ jobs:
     steps:
     - name: Checkout Master
       uses: actions/checkout@master
-    - name: Show appsettings.json
-      run: |
-        cat $GITHUB_WORKSPACE/appsettings.json
     - name: Update appsettings.json
       run: jq '.token = "${{ secrets.ANILIST_TOKEN }}"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json.temp && cp $GITHUB_WORKSPACE/appsettings.json.temp $GITHUB_WORKSPACE/appsettings.json 
-      env: 
-        ANILIST_TOKEN: ${{ secrets.ANILIST_TOKEN }}
     - name: Show appsettings.json again
       run: |
         cat $GITHUB_WORKSPACE/appsettings.json
-    - name: Hello world
-      run: echo Hello world ${first_name} ${middle_name} ${last_name}!
-      env:
-        first_name: Mona
-        middle_name: The
-        last_name: Octocat
