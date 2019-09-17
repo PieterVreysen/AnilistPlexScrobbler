@@ -16,10 +16,8 @@ jobs:
       run: |
         cat $GITHUB_WORKSPACE/appsettings.json
     - name: Update appsettings.json
-      env: 
-        first_name: testing
       run: |
-        jq '.token = "${FIRST_NAME}"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json
+        jq '.token = "testing"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json
     - name: Show appsettings.json again
       run: |
         cat $GITHUB_WORKSPACE/appsettings.json
