@@ -22,7 +22,7 @@ jobs:
     - name: Build container image
       uses: actions/docker/cli@master
       with:
-        args: build -t magenof/anilistplescrobbler:$(echo $GITHUB_SHA | head -c7) .
+        args: build -t magenof/anilistplexscrobbler:$(echo $GITHUB_SHA | head -c7) .
       
     - name: Docker Login
       uses: actions/docker/login@master
@@ -33,10 +33,10 @@ jobs:
     - name: Push image to Docker Hub
       uses: actions/docker/cli@master
       with:
-        args: push magenof/anilistplescrobbler
+        args: push magenof/anilistplexscrobbler
         
     - name: Update deployment file
-      run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|magenof/anilistplescrobbler:'${TAG}'|' $GITHUB_WORKSPACE/Config/deployment.yml
+      run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|magenof/anilistplexscrobbler:'${TAG}'|' $GITHUB_WORKSPACE/Config/deployment.yml
 
     - name: Save DigitalOcean kubeconfig
       uses: digitalocean/action-doctl@master
