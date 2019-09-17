@@ -26,3 +26,9 @@ jobs:
     - name: Show appsettings.json again
       run: |
         cat $GITHUB_WORKSPACE/appsettings.json
+    - name: Hello world
+      run: echo Hello world ${first_name} ${middle_name} ${last_name}!
+      env:
+        first_name: Mona
+        middle_name: The
+        last_name: Octocat
