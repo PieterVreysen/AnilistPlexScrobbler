@@ -1,17 +1,36 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
-
+    name: Build, push, and deploy
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+    - name: Checkout Master
+      uses: actions/checkout@master
+      
+    - name: Update appsettings.json
+      run: jq '.token = "${{ secrets.ANILIST_TOKEN }}"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json.temp && cp $GITHUB_WORKSPACE/appsettings.json.temp $GITHUB_WORKSPACE/appsettings.json 
+    
+    - name: Show appsettings.json
+      run: cat $GITHUB_WORKSPACE/appsettings.json
+      
+    - name: Build container image
+      uses: actions/docker/cli@master
+      with:
+        args: build -t magenof/anilistplescrobbler:$(echo $GITHUB_SHA | head -c7) .
+      
+    - name: Docker Login
+      uses: actions/docker/login@master
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push image to Docker Hub
+      uses: actions/docker/cli@master
+      with:
+        args: push magenof/anilistplescrobbler
