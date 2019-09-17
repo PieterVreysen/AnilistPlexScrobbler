@@ -14,5 +14,6 @@ jobs:
       uses: actions/checkout@master
     - name: Update appsettings.json
       run: |
-        cat  $GITHUB_WORKSPACE/appsettings.json | jq '.token = "test"'
+        jq '.token = "test"' $GITHUB_WORKSPACE/appsettings.json
+        cat $GITHUB_WORKSPACE/appsettings.json
         
