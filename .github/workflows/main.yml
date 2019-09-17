@@ -14,7 +14,7 @@ jobs:
       uses: actions/checkout@master
     - name: Update appsettings.json
       env: 
-        ANILIST_TOKEN: ${{ secrets.ANILIST_TOKEN }}
+        ANILIST_TOKEN: testing
       run: |
         jq '.token = "${ANILIST_TOKEN}"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json
         cat $GITHUB_WORKSPACE/appsettings.json
