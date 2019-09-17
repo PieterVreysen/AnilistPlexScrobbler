@@ -21,7 +21,7 @@ jobs:
     - name: Update appsettings.json
       run: |
         jq '.token = "${ANILIST_TOKEN}"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json.temp && cp $GITHUB_WORKSPACE/appsettings.json.temp $GITHUB_WORKSPACE/appsettings.json 
-      env: 
+      with: 
         ANILIST_TOKEN: test
     - name: Show appsettings.json again
       run: |
