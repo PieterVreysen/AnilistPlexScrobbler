@@ -14,6 +14,5 @@ jobs:
       uses: actions/checkout@master
     - name: Update appsettings.json
       run: jq '.token = "${{ secrets.ANILIST_TOKEN }}"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json.temp && cp $GITHUB_WORKSPACE/appsettings.json.temp $GITHUB_WORKSPACE/appsettings.json 
-    - name: Show appsettings.json again
-      run: |
-        cat $GITHUB_WORKSPACE/appsettings.json
+    - name: Show appsettings.json
+      run: cat $GITHUB_WORKSPACE/appsettings.json
