@@ -25,6 +25,7 @@ namespace AnilistPlexScrobbler.Services
         {
             var anime = await SearchAnilist(payload);
             if (anime == null) return;
+            
             await UpdateAniList(payload, anime);
         }
 
