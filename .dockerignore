@@ -1,0 +1,8 @@
+bin\
+obj\
+
+# Visual Studio Code
+.vscode
+
+# Development Appsettings
+appsettings.Development.json
