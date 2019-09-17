@@ -45,7 +45,7 @@ jobs:
       with:
         args: kubernetes cluster kubeconfig show k8s-ams3 > $GITHUB_WORKSPACE/.kubeconfig
 
-    - name: Deploy to DigitalOcean Kubernetes
+    - name: Deploy to DigitalOcean Kubernetes!
       uses: docker://lachlanevenson/k8s-kubectl
       with:
         args: --kubeconfig=/github/workspace/.kubeconfig apply -f /github/workspace/Config/deployment.yml
