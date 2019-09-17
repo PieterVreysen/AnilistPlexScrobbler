@@ -15,14 +15,10 @@ jobs:
     - name: Show appsettings.json
       run: |
         cat $GITHUB_WORKSPACE/appsettings.json
-    - name: Show updated Json
-      run: jq '.token = ${ANILIST_TOKEN}' $GITHUB_WORKSPACE/appsettings.json
-      env: 
-        ANILIST_TOKEN: ${{ secrets.ANILIST_TOKEN }}
     - name: Update appsettings.json
-      run: jq '.token = ${ANILIST_TOKEN}' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json.temp && cp $GITHUB_WORKSPACE/appsettings.json.temp $GITHUB_WORKSPACE/appsettings.json 
-      env: 
-        ANILIST_TOKEN: ${{ secrets.ANILIST_TOKEN }}
+      run: jq '.token = "$1"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json.temp && cp $GITHUB_WORKSPACE/appsettings.json.temp $GITHUB_WORKSPACE/appsettings.json 
+      with: 
+        args: ${{ secrets.ANILIST_TOKEN }}
     - name: Show appsettings.json again
       run: |
         cat $GITHUB_WORKSPACE/appsettings.json
