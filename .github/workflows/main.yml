@@ -1,56 +1,56 @@
-name: CI
+# name: CI
 
-on:
-  push:
-    branches:
-      - master
+# on:
+#   push:
+#     branches:
+#       - master
 
-jobs:
-  build:
-    name: Build, push, and deploy
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout Master
-      uses: actions/checkout@master
+# jobs:
+#   build:
+#     name: Build, push, and deploy
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Checkout Master
+#       uses: actions/checkout@master
       
-    - name: Update appsettings.json
-      run: jq '.token = "${{ secrets.ANILIST_TOKEN }}"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json.temp && cp $GITHUB_WORKSPACE/appsettings.json.temp $GITHUB_WORKSPACE/appsettings.json 
+#     - name: Update appsettings.json
+#       run: jq '.token = "${{ secrets.ANILIST_TOKEN }}"' $GITHUB_WORKSPACE/appsettings.json > $GITHUB_WORKSPACE/appsettings.json.temp && cp $GITHUB_WORKSPACE/appsettings.json.temp $GITHUB_WORKSPACE/appsettings.json 
     
-    - name: Show appsettings.json
-      run: cat $GITHUB_WORKSPACE/appsettings.json
+#     - name: Show appsettings.json
+#       run: cat $GITHUB_WORKSPACE/appsettings.json
       
-    - name: Build container image
-      uses: actions/docker/cli@master
-      with:
-        args: build -t magenof/anilistplescrobbler:$(echo $GITHUB_SHA | head -c7) .
+#     - name: Build container image
+#       uses: actions/docker/cli@master
+#       with:
+#         args: build -t magenof/anilistplescrobbler:$(echo $GITHUB_SHA | head -c7) .
       
-    - name: Docker Login
-      uses: actions/docker/login@master
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#     - name: Docker Login
+#       uses: actions/docker/login@master
+#       env:
+#         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Push image to Docker Hub
-      uses: actions/docker/cli@master
-      with:
-        args: push magenof/anilistplescrobbler
+#     - name: Push image to Docker Hub
+#       uses: actions/docker/cli@master
+#       with:
+#         args: push magenof/anilistplescrobbler
         
-    - name: Update deployment file
-      run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|magenof/anilistplescrobbler:'${TAG}'|' $GITHUB_WORKSPACE/Config/deployment.yml
+#     - name: Update deployment file
+#       run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|magenof/anilistplescrobbler:'${TAG}'|' $GITHUB_WORKSPACE/Config/deployment.yml
 
-    - name: Save DigitalOcean kubeconfig
-      uses: digitalocean/action-doctl@master
-      env:
-        DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      with:
-        args: kubernetes cluster kubeconfig show k8s-ams3 > $GITHUB_WORKSPACE/.kubeconfig
+#     - name: Save DigitalOcean kubeconfig
+#       uses: digitalocean/action-doctl@master
+#       env:
+#         DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+#       with:
+#         args: kubernetes cluster kubeconfig show k8s-ams3 > $GITHUB_WORKSPACE/.kubeconfig
 
-    - name: Deploy to DigitalOcean Kubernetes
-      uses: docker://lachlanevenson/k8s-kubectl
-      with:
-        args: --kubeconfig=/github/workspace/.kubeconfig apply -f /github/workspace/Config/deployment.yml
+#     - name: Deploy to DigitalOcean Kubernetes
+#       uses: docker://lachlanevenson/k8s-kubectl
+#       with:
+#         args: --kubeconfig=/github/workspace/.kubeconfig apply -f /github/workspace/Config/deployment.yml
 
-    - name: Verify deployment
-      uses: docker://lachlanevenson/k8s-kubectl
-      with:
-        args: --kubeconfig=/github/workspace/.kubeconfig rollout status deployment/anilistplexscrobbler
+#     - name: Verify deployment
+#       uses: docker://lachlanevenson/k8s-kubectl
+#       with:
+#         args: --kubeconfig=/github/workspace/.kubeconfig rollout status deployment/anilistplexscrobbler
