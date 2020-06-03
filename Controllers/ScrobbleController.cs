@@ -3,7 +3,6 @@ using AnilistPlexScrobbler.Dtos;
 using AnilistPlexScrobbler.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace AnilistPlexScrobbler.Controllers
 {
@@ -26,10 +25,8 @@ namespace AnilistPlexScrobbler.Controllers
         }
 
         [HttpPost("/")]
-        public async Task<IActionResult> Post([FromForm]ScrobbleFile file)
+        public async Task<IActionResult> Post(PlexPayload payload)
         {
-            var payload = JsonConvert.DeserializeObject<PlexPayload>(file.Payload);
-
             if (payload.Event != "media.scrobble" && payload.Event != "media.rate") return Ok();
 
             var animeLibraryTitle = _config.GetValue<string>("animeLibraryTitle");

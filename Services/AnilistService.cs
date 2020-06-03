@@ -98,6 +98,8 @@ namespace AnilistPlexScrobbler.Services
             }
             ";
 
+            if(string.IsNullOrEmpty(payload.Metadata.GrandparentTitle)) payload.Metadata.GrandparentTitle = null;
+            
             var variables = new QueryVariables
             {
                 Search = payload.Metadata.GrandparentTitle ?? payload.Metadata.ParentTitle ?? payload.Metadata.Title,
